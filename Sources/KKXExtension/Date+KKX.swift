@@ -9,10 +9,10 @@ import UIKit
 
 /// yyyy-MM-dd
 public let KKXDate = "yyyy-MM-dd"
-/// HH:ss:mm
-public let KKXTime = "HH:ss:mm"
+/// HH:mm:ss
+public let KKXTime = "HH:mm:ss"
 /// yyyy-MM-dd HH:ss:mm
-public let KKXDateAndTime = "yyyy-MM-dd HH:ss:mm"
+public let KKXDateAndTime = "yyyy-MM-dd HH:mm:ss"
 
 extension Date {
     

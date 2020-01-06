@@ -67,13 +67,13 @@ extension String {
     }
     
     /// 简单身份证过滤
-    public func isIdCardNum() -> Bool {
+    public func isIdNumber() -> Bool {
         let idCardRegex = "^(\\d{14}|\\d{17})(\\d|[xX])$"
         return isValidateByRegex(idCardRegex)
     }
     
     /// 精准身份证过滤
-    public func accurateVerifyIDCardNumber() -> Bool {
+    public func isRealIDNumber() -> Bool {
         let value = self.trimmingCharacters(in: CharacterSet.whitespaces)
         
         if value.count != 15 && value.count != 18 {
@@ -100,7 +100,7 @@ extension String {
         case 15:
             let start6Index = value.index(value.startIndex, offsetBy: 6)
             let index = value.index(start6Index, offsetBy: 2)
-            guard let y = Int(value[start2Index..<index]) else {
+            guard let y = Int(value[start6Index..<index]) else {
                 return false
             }
             year =  y + 1900
@@ -122,7 +122,7 @@ extension String {
         case 18:
             let start6Index = value.index(value.startIndex, offsetBy: 6)
             let index = value.index(start6Index, offsetBy: 4)
-            year = Int(value[start2Index..<index]) ?? 0
+            year = Int(value[start6Index..<index]) ?? 0
             if year%4 == 0 || (year%100 == 0 && year%4 == 0) {
                 guard let regular = try? NSRegularExpression(pattern: "^((1[1-5])|(2[1-3])|(3[1-7])|(4[1-6])|(5[0-4])|(6[1-5])|71|(8[12])|91)\\d{4}(((19|20)\\d{2}(0[13-9]|1[012])(0[1-9]|[12]\\d|30))|((19|20)\\d{2}(0[13578]|1[02])31)|((19|20)\\d{2}02(0[1-9]|1\\d|2[0-8]))|((19|20)([13579][26]|[2468][048]|0[048])0229))\\d{3}(\\d|X|x)?$", options: NSRegularExpression.Options.caseInsensitive) else {
                     return false

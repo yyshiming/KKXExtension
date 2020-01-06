@@ -33,6 +33,11 @@ public class KKXNoDataView: UIView {
             centerY?.constant = offset.vertical
         }
     }
+    public var margin: CGFloat = 30 {
+        didSet {
+            leading?.constant = margin
+        }
+    }
     public var imageView: UIImageView? {
         if _imageView == nil {
             let imageView = UIImageView()
@@ -47,9 +52,9 @@ public class KKXNoDataView: UIView {
     public var titleLabel: UILabel? {
         if _titleLabel == nil {
             let label = UILabel()
-            label.numberOfLines = 1
+            label.numberOfLines = 0
             label.font = UIFont.systemFont(ofSize: 18.0)
-            label.textColor = UIColor.black
+            label.textColor = UIColor.kkxBlack
             label.translatesAutoresizingMaskIntoConstraints = false
             _titleLabel = label
             if let _ = _imageView {
@@ -64,8 +69,8 @@ public class KKXNoDataView: UIView {
     
     public var button: UIButton? {
         if _button == nil {
-            let button = UIButton(type: .custom)
-            button.setTitleColor(.white, for: .normal)
+            let button = UIButton(type: .system)
+            button.tintColor = UIColor.kkxSystemBlue
             button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
             button.addTarget(self, action: #selector(clickButton), for: .touchUpInside)
             _button = button
@@ -77,6 +82,7 @@ public class KKXNoDataView: UIView {
     
     // MARK: -------- Private Properties --------
 
+    private var leading: NSLayoutConstraint?
     private var centerX: NSLayoutConstraint?
     private var centerY: NSLayoutConstraint?
     
@@ -104,7 +110,16 @@ public class KKXNoDataView: UIView {
         addGestureRecognizer(tapGesture)
         addSubview(stackView)
         
-        
+        leading = NSLayoutConstraint(
+            item: stackView,
+            attribute: .leading,
+            relatedBy: .greaterThanOrEqual,
+            toItem: self,
+            attribute: .leading,
+            multiplier: 1.0,
+            constant: 30.0
+        )
+        leading?.isActive = true
         centerX = NSLayoutConstraint(
             item: stackView,
             attribute: .centerX,

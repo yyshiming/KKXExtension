@@ -147,7 +147,7 @@ extension UIView {
                 bringSubviewToFront(kkx_loadingView)
                 kkx_loadingView.startAnimating()
                 
-                let attributes: [NSLayoutConstraint.Attribute] = [.top, .leading, .bottom, .trailing]
+                let attributes: [NSLayoutConstraint.Attribute] = [.centerX, .centerY, .width, .height]
                 for attribute in attributes {
                     NSLayoutConstraint(
                         item: kkx_loadingView,
@@ -159,8 +159,7 @@ extension UIView {
                         constant: 0.0
                     ).isActive = true
                 }
-            }
-            else {
+            } else {
                 kkx_loadingView.removeFromSuperview()
             }
         }
@@ -199,7 +198,7 @@ extension UIView {
                 addSubview(view)
                 view.isHidden = true
                 
-                let attributes: [NSLayoutConstraint.Attribute] = [.top, .leading, .bottom, .trailing]
+                let attributes: [NSLayoutConstraint.Attribute] = [.centerX, .centerY, .width, .height]
                 for attribute in attributes {
                     NSLayoutConstraint(
                         item: view,
@@ -211,7 +210,7 @@ extension UIView {
                         constant: 0.0
                     ).isActive = true
                 }
-                
+
                 objc_setAssociatedObject(self, &AssociatedKeys.noDataView, view, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
                 return view
             }
@@ -443,12 +442,8 @@ extension UIView : UIViewIndexPath {
     
 }
 
-public protocol KKXCalculateHeight {
-    var kkx_totalHeight: CGFloat { get }
-}
-
 // MARK: - ======== Cell计算高度 ========
-extension UIView: KKXCalculateHeight{
+extension UIView{
     
     /// 高度计算
     ///

@@ -120,6 +120,15 @@ extension UIColor: KKXUIColorDelegate {
         }
     }
     
+    /// 黑色
+    public class var kkxBlack: UIColor {
+        if #available(iOS 13.0, *) {
+            return .label
+        } else {
+            return .black
+        }
+    }
+    
     /// 白色
     public class var kkxWhite: UIColor {
         if #available(iOS 13.0, *) {

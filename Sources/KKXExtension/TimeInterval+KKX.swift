@@ -17,29 +17,31 @@ extension Int {
 
 extension TimeInterval {
     
-    /// 时间戳（毫秒），转成时间格式 00:00:00
-    public var timeString: String {
-        let format = "%.2d"
-        var theLastTime = "00:00"
-        let second = Int(self/1000.0)
-        if second < Int.aMinute {
-            theLastTime = String(format: "00:\(format)", second)
-        }
-        else if second < Int.aHour {
-            theLastTime = String(format: "\(format):\(format)", second/Int.aMinute, second%Int.aMinute)
-        }
-        else {
-            theLastTime = String(format: "\(format):\(format):\(format)", second/Int.aHour, second%Int.aHour/Int.aMinute, second%Int.aMinute)
-        }
-        return theLastTime
+    /// 时间戳（毫秒），转成时间格式字符串(自定义格式)
+    ///
+    ///     let millisecond = 3_600_000
+    ///     let string1 = millisecond.timeString()
+    ///     // string1 = "01:00:00"
+    ///
+    ///     let string2 = millisecond.timeString("HH时mm分")
+    ///     // string2 = "01时00分
+    ///
+    /// - Parameter formater: 日期格式，默认 HH:mm:ss
+    /// - Returns: formater格式字符串
+    public func timeString(_ formater: String = KKXTime) -> String {
+        return dateString(formater, timeZone: TimeZone(secondsFromGMT: 0))
     }
     
     /// 时间戳（毫秒），转成时间格式字符串(自定义格式)
     /// - Parameter formater: 日期格式，默认 yyyy-MM-dd
-    /// - Returns: formater字符串
-    public func dateString(_ formater: String = KKXDate) -> String {
+    /// - Parameter timeZone: 时区，默认为当前时区
+    /// - Returns: formater格式字符串
+    public func dateString(_ formater: String = KKXDate, timeZone: TimeZone? = nil) -> String {
         let dateFormater = DateFormatter()
         dateFormater.dateFormat = formater
+        if timeZone != nil {
+            dateFormater.timeZone = timeZone
+        }
         let date = Date(timeIntervalSince1970: self/1000.0)
         return dateFormater.string(from: date)
     }
