@@ -43,7 +43,7 @@ interval.dateString(KKXDateAndTime) // 毫秒转字符串
 
 ## <a id="UICollectionView+KKX.swift"></a>UICollectionView+KKX.swift
 ```swift
-let collectionView = UICollectionView()
+let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
 // cell注册
 collectionView.kkx_register(UICollectionViewCell.self)
 // cell复用

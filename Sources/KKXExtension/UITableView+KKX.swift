@@ -82,7 +82,12 @@ extension UITableView {
         let name = String(describing: cellClass) + "Templete"
         var cell = templateCells[name] as? T
         if cell == nil {
-            cell = kkx_dequeueReusableCell(cellClass)
+            if #available(iOS 11.0, *) {
+                // iOS 10会崩溃
+                cell = kkx_dequeueReusableCell(cellClass)
+            } else {
+                cell = cellClass.init()
+            }
             if cell == nil {
                 fatalError("Unable to dequeue \(String(describing: cellClass)) with reuse identifier of \(String(describing: cellClass))")
             }
@@ -130,7 +135,13 @@ extension UITableView {
         var view = templateHeaders[name] as? T
         
         if view == nil {
-            view = kkx_dequeueReusableHeaderFooterView(viewClass)
+            if #available(iOS 11.0, *) {
+                // iOS 10会崩溃
+                view = kkx_dequeueReusableHeaderFooterView(viewClass)
+            } else {
+                view = viewClass.init()
+            }
+            
             if view == nil {
                 fatalError("Unable to dequeue \(String(describing: viewClass)) with reuse identifier of \(String(describing: viewClass))")
             }
