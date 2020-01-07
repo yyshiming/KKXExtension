@@ -449,7 +449,7 @@ extension UIView{
     ///
     ///     view中重写 kkx_totalHeight，返回view的真实高度
     @objc
-    public var kkx_totalHeight: CGFloat {
+    open var kkx_totalHeight: CGFloat {
         0.0
     }
 
