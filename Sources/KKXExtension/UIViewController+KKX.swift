@@ -17,6 +17,7 @@ import Reachability
 
 /// 自定义返回按钮的viewController需要实现的协议
 public protocol KKXCustomBackItem: NSObjectProtocol { }
+public protocol KKXCustomNavigationBar: NSObjectProtocol { }
 
 // MARK: - ======== swizzle ========
 extension UIViewController {
@@ -150,6 +151,7 @@ extension UIViewController {
     public var kkx_hud: MBProgressHUD {
         guard let hud = objc_getAssociatedObject(self, &AssociatedKeys.kkxHUD) as? MBProgressHUD else {
             let newHUD = MBProgressHUD(view: self.view)
+            newHUD.label.numberOfLines = 0
             self.view.addSubview(newHUD)
             objc_setAssociatedObject(self, &AssociatedKeys.kkxHUD, newHUD, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             return newHUD
@@ -189,7 +191,7 @@ extension UIViewController {
     
     @objc private func kkx_viewDidLoad() {
         self.kkx_viewDidLoad()
-        if let _ = self as? KKXCustomBackItem {
+        if self is KKXCustomBackItem {
             let backItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
             backItem.width = 80
             navigationItem.backBarButtonItem = backItem
@@ -198,7 +200,7 @@ extension UIViewController {
     
     @objc private func kkx_viewWillAppear(_ animated: Bool) {
         self.kkx_viewWillAppear(animated)
-        if let _ = navigationController {
+        if let _ = navigationController, self is KKXCustomNavigationBar {
             reloadNavigationBar()
         }
     }

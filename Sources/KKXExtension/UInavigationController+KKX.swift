@@ -18,6 +18,9 @@ extension UINavigationController {
     @objc private func kkx_pushViewController(_ viewController: UIViewController, animated: Bool) {
         
         if self.viewControllers.count == 1 { viewController.hidesBottomBarWhenPushed = true }
+        if viewController is KKXCustomNavigationBar {
+            viewController.kkx_lastNavBarStyle = self.topViewController?.kkx_customNavBarStyle
+        }
         self.kkx_pushViewController(viewController, animated: animated)
     }
 }

@@ -391,12 +391,12 @@ extension UICollectionViewLayout {
     
 }
 
-public protocol HSCollectionViewDelegate: UICollectionViewDelegate {
+public protocol KKXCollectionViewDelegate: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, hasDecorationViewAt section: Int) -> Bool
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, decorationViewInsetForSectionAt section: Int) -> UIEdgeInsets
 }
 
-extension HSCollectionViewDelegate {
+extension KKXCollectionViewDelegate {
     
     public func collectionView(_ collectionView: UICollectionView, hasDecorationViewAt section: Int) -> Bool {
         return false
