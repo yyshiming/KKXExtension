@@ -382,7 +382,7 @@ extension UICollectionViewLayout {
     
     public func decorationInsetsForSection(_ section: Int) -> UIEdgeInsets {
         if let collectionView = collectionView,
-            let delegate = collectionView.delegate as? HSCollectionViewDelegate {
+            let delegate = collectionView.delegate as? KKXCollectionViewDelegate {
             let inset = delegate.collectionView(collectionView, layout: self, decorationViewInsetForSectionAt: section)
             return inset
         }
