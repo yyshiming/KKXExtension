@@ -345,7 +345,7 @@ extension UICollectionViewLayout {
         return 0
     }
     
-    public func item(in section: Int) -> Int {
+    public func items(in section: Int) -> Int {
         if let collectionView = collectionView,
             let delegate = collectionView.dataSource {
             return delegate.collectionView(collectionView, numberOfItemsInSection: section)

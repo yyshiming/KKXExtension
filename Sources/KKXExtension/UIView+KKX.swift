@@ -455,7 +455,7 @@ extension UIView{
 
 }
 
-// MARK: - ======== KKXAssociated ========
+// MARK: - ======== AssociatedKeys ========
 private struct AssociatedKeys {
     static var timerDelegate = "kkx-timerDelegate"
     static var timerObject = "kkx-timerObject"

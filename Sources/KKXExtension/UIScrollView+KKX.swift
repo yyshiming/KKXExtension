@@ -208,7 +208,7 @@ extension UIScrollView {
     }
 }
 
-// MARK: - ======== KKXAssociated ========
+// MARK: - ======== AssociatedKeys ========
 fileprivate struct AssociatedKeys {
     static var pageNumber = "kkx-pageNumber"
     static var pageSize = "kkx-pageSize"

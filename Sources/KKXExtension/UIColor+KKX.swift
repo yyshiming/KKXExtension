@@ -76,31 +76,27 @@ extension UIColor {
     
 }
 
-public protocol KKXUIColorDelegate {
-    var main: UIColor? { get set }
-    var mainBackground: UIColor? { get set }
-}
-extension UIColor: KKXUIColorDelegate {
+extension UIColor {
     
     /// 设置主题颜色
-    public var main: UIColor? {
+    public class var main: UIColor? {
         get {
-            let color = objc_getAssociatedObject(self, &KKXAssociated.main) as? UIColor
+            let color = objc_getAssociatedObject(self, &AssociatedKeys.main) as? UIColor
             return color
         }
         set {
-            objc_setAssociatedObject(self, &KKXAssociated.main, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &AssociatedKeys.main, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     
     /// 设置背景颜色
-    public var mainBackground: UIColor? {
+    public class var mainBackground: UIColor? {
         get {
-            let color = objc_getAssociatedObject(self, &KKXAssociated.mainBackground) as? UIColor
+            let color = objc_getAssociatedObject(self, &AssociatedKeys.mainBackground) as? UIColor
             return color
         }
         set {
-            objc_setAssociatedObject(self, &KKXAssociated.mainBackground, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &AssociatedKeys.mainBackground, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
 
@@ -117,6 +113,14 @@ extension UIColor: KKXUIColorDelegate {
 
         } else {
             return .white
+        }
+    }
+    
+    public class var kkxSubTitle: UIColor {
+        if #available(iOS 13.0, *) {
+            return .secondaryLabel
+        } else {
+            return UIColor(red: 60.0/255.0, green: 60.0/255.0, blue: 67.0/255.0, alpha: 0.6)
         }
     }
     
@@ -158,8 +162,7 @@ extension UIColor: KKXUIColorDelegate {
         if #available(iOS 13.0, *) {
             return .placeholderText
         } else {
-            return #colorLiteral(red: 0.2352941176, green: 0.2352941176, blue: 0.262745098, alpha: 0.3)
-//            return UIColor(red: 60.0/255.0, green: 60.0/255.0, blue: 67.0/255.0, alpha: 0.3)
+            return UIColor(red: 60.0/255.0, green: 60.0/255.0, blue: 67.0/255.0, alpha: 0.3)
         }
     }
     
@@ -168,8 +171,7 @@ extension UIColor: KKXUIColorDelegate {
         if #available(iOS 13.0, *) {
             return .separator
         } else {
-            return #colorLiteral(red: 0.2352941176, green: 0.2352941176, blue: 0.262745098, alpha: 0.3)
-//            return UIColor(red: 60.0/255.0, green: 60.0/255.0, blue: 67.0/255.0, alpha: 0.3)
+            return UIColor(red: 60.0/255.0, green: 60.0/255.0, blue: 67.0/255.0, alpha: 0.3)
         }
     }
     
@@ -182,8 +184,8 @@ extension UIColor: KKXUIColorDelegate {
     }
 }
 
-// MARK: - ======== KKXAssociated ========
-private struct KKXAssociated {
+// MARK: - ======== AssociatedKeys ========
+private struct AssociatedKeys {
     static var main = "kkx-main"
     static var mainBackground = "kkx-mainBackground"
 }

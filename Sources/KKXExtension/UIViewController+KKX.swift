@@ -699,22 +699,6 @@ extension UIViewController {
     
 }
 
-// MARK: - ======== deinitLog ========
-extension UIViewController {
-    
-    public func kkx_deinitLog() {
-        kkxPrint(NSStringFromClass(self.classForCoder) + " deinit")
-    }
-    
-}
-
-// MARK: - ======== LocalizedString ========
-public func KKXExtensionString(_ key: String) -> String {
-    
-    return NSLocalizedString(key, tableName: "KKXExtension", bundle: Bundle.main, value: "", comment: "")
-    
-}
-
 // MARK: - ======== AssociatedKeys ========
 fileprivate struct AssociatedKeys {
     static var shouldReloadData = "kkx-shouldReloadData"

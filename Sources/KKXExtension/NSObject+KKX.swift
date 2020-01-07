@@ -81,6 +81,15 @@ extension NSObject {
     }
 }
 
+// MARK: - ======== deinitLog ========
+extension NSObject {
+    
+    public func kkx_deinitLog() {
+        kkxPrint(NSStringFromClass(self.classForCoder) + " deinit")
+    }
+    
+}
+
 fileprivate struct AssociatedKeys {
     static var datePicker = "kkx-datePicker"
     static var inputAccessoryBar = "kkx-inputAccessoryBar"

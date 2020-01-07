@@ -185,10 +185,10 @@ extension String {
     /// 字符串(自定义格式) 转成Date
     /// - Parameter formater: 格式， 默认 yyyy-MM-dd
     /// - Returns: formater格式的Date
-    public func dateValue(_ formater: String = KKXDate) -> Date {
+    public func dateValue(_ formater: String = KKXDate) -> Date? {
         let dateFormater = DateFormatter()
         dateFormater.dateFormat = formater
-        return dateFormater.date(from: self) ?? Date()
+        return dateFormater.date(from: self)
     }
     
 }
