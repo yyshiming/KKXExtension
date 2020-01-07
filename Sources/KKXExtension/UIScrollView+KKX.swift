@@ -6,9 +6,6 @@
 //
 
 import UIKit
-#if canImport(MJRefresh)
-import MJRefresh
-#endif
 
 extension UIScrollView {
     
@@ -67,38 +64,7 @@ extension UIScrollView {
             objc_setAssociatedObject(self, &AssociatedKeys.hasMoreData, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
-    
-    #if canImport(MJRefresh)
-    public func beginRefreshing(_ isRefresh: Bool = true) {
-        if isFirstLoad {
-            self.superview?.kkx_loading = true
-            if self.isHideOnFirstLoad {
-                self.isHidden = true
-            }
-        }
-        if isRefresh {
-            self.hasMoreData = true
-            self.mj_footer?.resetNoMoreData()
-        }
-    }
-    
-    public func endRefreshing() {
-        if isFirstLoad {
-            self.superview?.kkx_loading = false
-            self.isFirstLoad = false
-            self.isHidden = false
-        }
-        
-        self.mj_header?.endRefreshing()
-        if hasMoreData {
-            self.mj_footer?.endRefreshing()
-        }
-        else {
-            self.mj_footer?.endRefreshingWithNoMoreData()
-        }
-    }
-    #endif
-    
+
 }
 
 // MARK: - ======== 缓存属性 ========

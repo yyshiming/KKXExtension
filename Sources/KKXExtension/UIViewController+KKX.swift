@@ -7,13 +7,6 @@
 
 import UIKit
 import Photos
-#if canImport(MBProgressHUD)
-import MBProgressHUD
-#endif
-
-#if canImport(Reachability)
-import Reachability
-#endif
 
 /// 自定义返回按钮的viewController需要实现的协议
 public protocol KKXCustomBackItem: NSObjectProtocol { }
@@ -142,43 +135,6 @@ extension UIViewController {
     }
     
 }
-
-// MARK: - ======== MBProgressHUD ========
-#if canImport(MBProgressHUD)
-public let delayDuration: Double = 1.5
-extension UIViewController {
-    
-    public var kkx_hud: MBProgressHUD {
-        guard let hud = objc_getAssociatedObject(self, &AssociatedKeys.kkxHUD) as? MBProgressHUD else {
-            let newHUD = MBProgressHUD(view: self.view)
-            newHUD.label.numberOfLines = 0
-            self.view.addSubview(newHUD)
-            objc_setAssociatedObject(self, &AssociatedKeys.kkxHUD, newHUD, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            return newHUD
-        }
-        return hud
-    }
-    
-    public func showHUD() {
-        MBProgressHUD.showAdded(to: self.view, animated: true)
-    }
-    
-    public func hideHUD() {
-        MBProgressHUD.hide(for: self.view, animated: true)
-    }
-    
-    @discardableResult
-    public func showToast(_ toast: String, duration: Double = delayDuration) -> MBProgressHUD {
-        let hud = MBProgressHUD.showAdded(to: self.view, animated: true)
-        hud.mode = .text
-        hud.label.text = toast
-        hud.label.numberOfLines = 0
-        hud.hide(animated: true, afterDelay: duration)
-        return hud
-    }
-    
-}
-#endif
 
 // MARK: - ======== Life Circle ========
 extension UIViewController {
@@ -456,43 +412,6 @@ extension UIViewController {
     
 }
 
-#if canImport(Reachability)
-// MARK: - ======== 网络状态监听 ========
-public protocol KKXReachabilityDelegate: AnyObject {
-    func onReachable(_ reachability: Reachability?)
-    func onUnreachable(_ reachability: Reachability?)
-}
-extension KKXReachabilityDelegate {
-    public func onReachable(_ reachability: Reachability?) { }
-    public func onUnreachable(_ reachability: Reachability?) { }
-}
-
-extension UIViewController {
-    
-    private weak var kkx_reachabilityDelegate: KKXReachabilityDelegate? {
-        return self as? KKXReachabilityDelegate
-    }
-    
-    public var reachability: Reachability? {
-        var reachability = objc_getAssociatedObject(self, &AssociatedKeys.reachability) as? Reachability
-        if reachability == nil {
-            reachability = try? Reachability()
-            reachability?.whenReachable = { [weak self](reachability) in
-                self?.kkx_reachabilityDelegate?.onReachable(reachability)
-            }
-            reachability?.whenUnreachable = { [weak self](reachability) in
-                self?.kkx_reachabilityDelegate?.onUnreachable(reachability)
-            }
-            if let _ = reachability {
-                objc_setAssociatedObject(self, &AssociatedKeys.reachability, reachability!, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            }
-        }
-        return reachability
-    }
-    
-}
-#endif
-
 // MARK: - ======== UIImagePickerController ========
 extension UIViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -660,55 +579,12 @@ extension UIViewController {
     
 }
 
-// MARK: - ======== 保存图片到相册 ========
-extension UIViewController {
-    
-    public func kkx_savePhoto(_ image: UIImage?) {
-        guard let image = image else { return }
-        
-        PHPhotoLibrary.requestAuthorization { (status) in
-            switch status {
-            case .authorized:
-                #if canImport(MBProgressHUD)
-                DispatchQueue.safe {
-                    self.kkx_hud.mode = .indeterminate
-                    self.kkx_hud.label.text = nil
-                    self.kkx_hud.show(animated: true)
-                }
-                #endif
-
-                PHPhotoLibrary.shared().performChanges({
-                    PHAssetChangeRequest.creationRequestForAsset(from: image)
-                }) { (success, error) in
-                    if success {
-                        #if canImport(MBProgressHUD)
-                        DispatchQueue.safe {
-                            self.kkx_hud.mode = .text
-                            self.kkx_hud.label.text = KKXExtensionString("saved-to-album")
-                            self.kkx_hud.hide(animated: true, afterDelay: delayDuration)
-                        }
-                        #endif
-                    }
-                    else {
-                        kkxPrint(KKXExtensionString("save-failure") + "：" + (error?.localizedDescription ?? ""))
-                    }
-                }
-            default:
-                break
-            }
-        }
-    }
-    
-}
-
 // MARK: - ======== AssociatedKeys ========
 fileprivate struct AssociatedKeys {
     static var shouldReloadData = "kkx-shouldReloadData"
     static var plainTableView = "kkx-plainTableView"
     static var groupedTableView = "kkx-groupedTableView"
-    
-    static var kkxHUD = "kkx-hud"
-    
+        
     static var statusBarAnimation = "kkx-statusBarAnimation"
     static var statusBarStyle = "kkx-statusBarStyle"
 
