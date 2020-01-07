@@ -6,9 +6,7 @@ struct KKXExtension {
 
 // MARK: - ======== LocalizedString ========
 public func KKXExtensionString(_ key: String) -> String {
-    
     return NSLocalizedString(key, tableName: "KKXExtension", bundle: Bundle.main, value: "", comment: "")
-    
 }
 
 /// DEBUG环境打印
