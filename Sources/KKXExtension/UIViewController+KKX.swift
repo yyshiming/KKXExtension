@@ -579,6 +579,31 @@ extension UIViewController {
     
 }
 
+// MARK: - ======== 保存图片到相册 ========
+extension UIViewController {
+    
+    public func kkx_savePhoto(_ image: UIImage?, began: (() -> Void)? = nil, completion: ((Bool, Error?) -> Void)? = nil) {
+        guard let _ = image else {
+            return
+        }
+        
+        PHPhotoLibrary.requestAuthorization { (status) in
+            switch status {
+            case .authorized:
+                began?()
+                PHPhotoLibrary.shared().performChanges({
+                    PHAssetChangeRequest.creationRequestForAsset(from: image!)
+                }) { (success, error) in
+                    completion?(success, error)
+                }
+            default:
+                break
+            }
+        }
+    }
+    
+}
+
 // MARK: - ======== AssociatedKeys ========
 fileprivate struct AssociatedKeys {
     static var shouldReloadData = "kkx-shouldReloadData"
