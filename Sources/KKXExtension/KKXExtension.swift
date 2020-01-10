@@ -16,6 +16,13 @@ public func kkxPrint(_ items: Any..., separator: String = " ", terminator: Strin
     #endif
 }
 
+/// DEBUG环境打印
+public func kkxDebugPrint(_ items: Any..., separator: String = " ", terminator: String = "\n") {
+    #if DEBUG
+    debugPrint(items, separator, terminator)
+    #endif
+}
+
 public func initializeSwizzle() {
     UITableView.initializeTableView()
     UICollectionView.initializeCollectionView()

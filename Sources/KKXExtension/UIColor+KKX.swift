@@ -77,28 +77,6 @@ extension UIColor {
 }
 
 extension UIColor {
-    
-    /// 设置主题颜色
-    public class var main: UIColor? {
-        get {
-            let color = objc_getAssociatedObject(self, &AssociatedKeys.main) as? UIColor
-            return color
-        }
-        set {
-            objc_setAssociatedObject(self, &AssociatedKeys.main, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-    
-    /// 设置背景颜色
-    public class var mainBackground: UIColor? {
-        get {
-            let color = objc_getAssociatedObject(self, &AssociatedKeys.mainBackground) as? UIColor
-            return color
-        }
-        set {
-            objc_setAssociatedObject(self, &AssociatedKeys.mainBackground, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
 
     public class var kkxCard: UIColor {
         if #available(iOS 13.0, *) {
@@ -182,10 +160,4 @@ extension UIColor {
             return #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
         }
     }
-}
-
-// MARK: - ======== AssociatedKeys ========
-private struct AssociatedKeys {
-    static var main = "kkx-main"
-    static var mainBackground = "kkx-mainBackground"
 }

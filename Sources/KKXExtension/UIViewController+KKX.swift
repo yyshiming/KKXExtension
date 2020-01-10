@@ -319,8 +319,8 @@ extension UIViewController {
         kkx_navBarStyle = .default
         kkx_statusBarStyle = .default
         kkx_navBarIsTranslucent = true
-        kkx_navBarTitleColor = .black
-        kkx_navBarTintColor = .black
+        kkx_navBarTitleColor = .kkxBlack
+        kkx_navBarTintColor = .kkxBlack
     }
     
     /// 设置导航栏为透明色，item、title、状态栏为白色
