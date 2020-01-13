@@ -12,7 +12,7 @@ public func KKXExtensionString(_ key: String) -> String {
 /// DEBUG环境打印
 public func kkxPrint(_ items: Any..., separator: String = " ", terminator: String = "\n") {
     #if DEBUG
-    print(items, separator, terminator)
+//    print(items, separator, terminator)
     #endif
 }
 

@@ -104,12 +104,7 @@ extension UICollectionView {
         let name = String(describing: cellClass) + "Template"
         var cell = templateCells[name] as? T
         if cell == nil {
-            if #available(iOS 11.0, *) {
-                // iOS 10会崩溃
-                cell = kkx_dequeueReusableCell(cellClass, for: indexPath)
-            } else {
-                cell = cellClass.init()
-            }
+            cell = cellClass.init()
             if cell == nil {
                 fatalError("Unable to dequeue \(String(describing: cellClass)) with reuse identifier of \(String(describing: cellClass))")
             }
@@ -150,13 +145,7 @@ extension UICollectionView {
             view = templateFooters[name] as? T
         }
         if view == nil {
-            if #available(iOS 11.0, *) {
-                // iOS 10会崩溃
-                let indexPath = IndexPath(item: 0, section: section)
-                view = kkx_dequeueReusableSupplementaryView(viewClass, ofKind: kind, for: indexPath)
-            } else {
-                view = viewClass.init()
-            }
+            view = viewClass.init()
             if view == nil {
                 fatalError("Unable to dequeue \(String(describing: viewClass)) with reuse identifier of \(String(describing: viewClass))")
             }
