@@ -73,6 +73,7 @@ public class KKXNoDataView: UIView {
             button.tintColor = UIColor.kkxSystemBlue
             button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
             button.addTarget(self, action: #selector(clickButton), for: .touchUpInside)
+            button.translatesAutoresizingMaskIntoConstraints = false
             _button = button
             stackView.addArrangedSubview(button)
         }
@@ -109,17 +110,36 @@ public class KKXNoDataView: UIView {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapAction))
         addGestureRecognizer(tapGesture)
         addSubview(stackView)
-        
+        configureConstraints()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    // MARK: -------- Actions --------
+    
+    private func configureConstraints() {
+        removeConstraints(constraints)
         leading = NSLayoutConstraint(
             item: stackView,
             attribute: .leading,
-            relatedBy: .greaterThanOrEqual,
+            relatedBy: .equal,
             toItem: self,
             attribute: .leading,
             multiplier: 1.0,
             constant: 30.0
         )
         leading?.isActive = true
+        NSLayoutConstraint(
+            item: stackView,
+            attribute: .top,
+            relatedBy: .greaterThanOrEqual,
+            toItem: self,
+            attribute: .top,
+            multiplier: 1.0,
+            constant: 30.0
+        ).isActive = true
         centerX = NSLayoutConstraint(
             item: stackView,
             attribute: .centerX,
@@ -141,12 +161,6 @@ public class KKXNoDataView: UIView {
         )
         centerY?.isActive = true
     }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
-    // MARK: -------- Actions --------
     
     @objc private func tapAction() {
         delegate?.noDataViewDidTap(self)
