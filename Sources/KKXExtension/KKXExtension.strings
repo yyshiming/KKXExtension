@@ -17,6 +17,8 @@
 "Cancel" = "取消";
 "Error" = "错误";
 "Retry" = "重试";
+"PreviousStep" = "上一个";
+"NextStep" = "下一个";
 
 "save-to-album" = "保存图片到相册";
 "saved-to-album" = "图片已保存到您的相册！";
