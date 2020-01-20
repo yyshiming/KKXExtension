@@ -120,6 +120,21 @@ extension UIColor {
         }
     }
     
+    public class var kkxTipLabel: UIColor {
+        if #available(iOS 13.0, *) {
+            return UIColor { (collection) -> UIColor in
+                if collection.userInterfaceStyle == .dark {
+                    return UIColor(red: 230.0/255.0, green: 230.0/255.0, blue: 240.0/255.0, alpha: 0.7)
+                }
+                else {
+                    return UIColor(red: 60.0/255.0, green: 60.0/255.0, blue: 67.0/255.0, alpha: 0.7)
+                }
+            }
+        } else {
+            return UIColor(red: 60.0/255.0, green: 60.0/255.0, blue: 67.0/255.0, alpha: 0.7)
+        }
+    }
+    
     public class var kkxGray: UIColor {
         if #available(iOS 13.0, *) {
             return UIColor { (collection) -> UIColor in
