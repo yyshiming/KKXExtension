@@ -25,9 +25,6 @@ extension UIViewController {
         kkx_swizzleSelector(self, originalSelector: #selector(getter: preferredStatusBarStyle), swizzledSelector: #selector(kkx_statusBarUpdateStyle))
         kkx_swizzleSelector(self, originalSelector: #selector(getter: preferredStatusBarUpdateAnimation), swizzledSelector: #selector(kkx_statusBarUpdateAnimation))
         
-        kkx_swizzleSelector(self, originalSelector: #selector(getter: shouldAutorotate), swizzledSelector: #selector(kkxShouldAutorotate))
-        kkx_swizzleSelector(self, originalSelector: #selector(getter: supportedInterfaceOrientations), swizzledSelector: #selector(kkxSupportedInterfaceOrientations))
-        kkx_swizzleSelector(self, originalSelector: #selector(getter: preferredInterfaceOrientationForPresentation), swizzledSelector: #selector(kkxPreferredInterfaceOrientationForPresentation))
     }
     
 }
@@ -117,21 +114,6 @@ extension UIViewController {
             bottom += kkx_tabBarHeight
         }
         return bottom
-    }
-    
-    /// keyWindow安全区域
-    ///
-    ///     状态栏没有隐藏时
-    ///     iPhone X:
-    ///     UIEdgeInsets(top: 44, left: 0, bottom: 34, right: 0)
-    ///     其他：
-    ///     UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
-    public var kkx_safeAreaInsets: UIEdgeInsets {
-        var insets: UIEdgeInsets = .zero
-        if #available(iOS 11.0, *) {
-            insets = UIApplication.shared.keyWindow?.safeAreaInsets ?? .zero
-        }
-        return insets
     }
     
 }
@@ -337,77 +319,6 @@ extension UIViewController {
         let style = NSMutableParagraphStyle()
         style.lineBreakMode = .byTruncatingMiddle
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: color]
-    }
-    
-}
-
-// MARK: - ======== 屏幕旋转控制，默认所有控制器不旋转 ========
-extension UIViewController {
-    
-    public var kkx_shouldAutorotate: Bool {
-        get {
-            let autoratate = objc_getAssociatedObject(self, &AssociatedKeys.shouldAutorotate) as? Bool
-            return autoratate ?? false
-        }
-        set {
-            objc_setAssociatedObject(self, &AssociatedKeys.shouldAutorotate, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-    
-    public var kkx_supportedOrientations: UIInterfaceOrientationMask {
-        get {
-            let orientation = objc_getAssociatedObject(self, &AssociatedKeys.supportedOrientations) as? UIInterfaceOrientationMask
-            return orientation ?? .portrait
-        }
-        set {
-            objc_setAssociatedObject(self, &AssociatedKeys.supportedOrientations, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-    
-    public var kkx_preferredOrientationForPresentation: UIInterfaceOrientation {
-        get {
-            let orientation = objc_getAssociatedObject(self, &AssociatedKeys.preferredOrientationForPresentation) as? UIInterfaceOrientation
-            return orientation ?? .portrait
-        }
-        set {
-            objc_setAssociatedObject(self, &AssociatedKeys.preferredOrientationForPresentation, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-    
-    @objc private func kkxShouldAutorotate() -> Bool {
-        if let tabBarController = self as? UITabBarController,
-            let selectedVC = tabBarController.selectedViewController {
-            return selectedVC.shouldAutorotate
-        }
-        else if let navController = self as? UINavigationController,
-            let topVC = navController.topViewController {
-            return topVC.shouldAutorotate
-        }
-        return kkx_shouldAutorotate
-    }
-    
-    @objc private func kkxSupportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        if let tabBarController = self as? UITabBarController,
-            let selectedVC = tabBarController.selectedViewController {
-            return selectedVC.supportedInterfaceOrientations
-        }
-        else if let navController = self as? UINavigationController,
-            let topVC = navController.topViewController {
-            return topVC.supportedInterfaceOrientations
-        }
-        return kkx_supportedOrientations
-    }
-    
-    @objc private func kkxPreferredInterfaceOrientationForPresentation() -> UIInterfaceOrientation {
-        if let tabBarController = self as? UITabBarController,
-            let selectedVC = tabBarController.selectedViewController {
-            return selectedVC.preferredInterfaceOrientationForPresentation
-        }
-        else if let navController = self as? UINavigationController,
-            let topVC = navController.topViewController {
-            return topVC.preferredInterfaceOrientationForPresentation
-        }
-        return kkx_preferredOrientationForPresentation
     }
     
 }

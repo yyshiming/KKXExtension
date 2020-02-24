@@ -231,6 +231,21 @@ extension NSObject {
         kkxPrint(NSStringFromClass(self.classForCoder) + " deinit")
     }
     
+    /// keyWindow安全区域
+    ///
+    ///     状态栏没有隐藏时
+    ///     iPhone X:
+    ///     UIEdgeInsets(top: 44, left: 0, bottom: 34, right: 0)
+    ///     其他：
+    ///     UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
+    public var kkx_safeAreaInsets: UIEdgeInsets {
+        var insets: UIEdgeInsets = .zero
+        if #available(iOS 11.0, *) {
+            insets = UIApplication.shared.keyWindow?.safeAreaInsets ?? .zero
+        }
+        return insets
+    }
+    
 }
 
 fileprivate struct AssociatedKeys {

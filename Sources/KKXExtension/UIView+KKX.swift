@@ -404,7 +404,7 @@ extension UIView {
 // MARK: - ========  模糊效果 ========
 extension UIView {
     
-    public func blur(withStyle style: UIBlurEffect.Style = .light) {
+    public func blur(with style: UIBlurEffect.Style = .light) {
         let blurEffect = UIBlurEffect(style: style)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = bounds
@@ -413,9 +413,9 @@ extension UIView {
         clipsToBounds = true
     }
     
-    public func blurred(withStyle style: UIBlurEffect.Style = .light) -> UIView {
+    public func blurred(with style: UIBlurEffect.Style = .light) -> UIView {
         let imgView = self
-        imgView.blur(withStyle: style)
+        imgView.blur(with: style)
         return imgView
     }
     
