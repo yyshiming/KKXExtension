@@ -1,5 +1,5 @@
 /* 
-  KKXLocalizable.strings
+  KKXExtension.strings
   KKXExtension
 
   Created by ming on 2019/4/8.
@@ -23,3 +23,4 @@
 "save-to-album" = "保存图片到相册";
 "saved-to-album" = "图片已保存到您的相册！";
 "save-failure" = "图片保存失败";
+

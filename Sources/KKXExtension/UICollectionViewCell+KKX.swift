@@ -29,19 +29,19 @@ extension UICollectionViewCell {
         }
     }
     
-    override open var canBecomeFirstResponder: Bool {
+    open override var canBecomeFirstResponder: Bool {
         return true
     }
     
-    override open func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+    open override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         if action == #selector(delete(_:)){
             return true
         }
         return false
     }
     
-    override open func delete(_ sender: Any?) {
-        deleteAction?(kkx_indexPath)
+    open override func delete(_ sender: Any?) {
+        deleteAction?(kkxIndexPath)
     }
 
 }

@@ -54,7 +54,7 @@ public class KKXNoDataView: UIView {
             let label = UILabel()
             label.numberOfLines = 0
             label.font = UIFont.systemFont(ofSize: 18.0)
-            label.textColor = UIColor.kkxBlack
+            label.textColor = UIColor.kkxSubTitle
             label.translatesAutoresizingMaskIntoConstraints = false
             _titleLabel = label
             if let _ = _imageView {

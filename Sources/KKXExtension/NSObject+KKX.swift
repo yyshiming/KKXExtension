@@ -40,7 +40,7 @@ public enum KKXInputAccessoryBarStyle {
 
 extension NSObject {
     
-    private weak var kkx_inputDelegate: KKXInputDelegate? {
+    private weak var kkxInputDelegate: KKXInputDelegate? {
         return self as? KKXInputDelegate
     }
     
@@ -62,7 +62,7 @@ extension NSObject {
             
             let picker = UIDatePicker()
             picker.datePickerMode = .date
-            picker.addTarget(self, action: #selector(kkx_valueChanged(_:)), for: .valueChanged)
+            picker.addTarget(self, action: #selector(kkxValueChanged(_:)), for: .valueChanged)
             return picker
         }
     }
@@ -139,7 +139,7 @@ extension NSObject {
     
     public var cancelItem: UIBarButtonItem {
         guard let item = objc_getAssociatedObject(self, &AssociatedKeys.cancelItem) as? UIBarButtonItem else {
-            let item = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(kkx_cancelAction))
+            let item = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(kkxCancelAction))
             objc_setAssociatedObject(self, &AssociatedKeys.cancelItem, item, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             return item
         }
@@ -148,7 +148,7 @@ extension NSObject {
     
     public var previousStepItem: UIBarButtonItem {
         guard let item = objc_getAssociatedObject(self, &AssociatedKeys.previousStepItem) as? UIBarButtonItem else {
-            let item = UIBarButtonItem(image: UIImage(named: "kkx_arrow_up"), style: .plain, target: self, action: #selector(kkx_previousStepAction))
+            let item = UIBarButtonItem(image: UIImage(named: "kkx_arrow_up"), style: .plain, target: self, action: #selector(kkxPreviousStepAction))
             objc_setAssociatedObject(self, &AssociatedKeys.previousStepItem, item, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             return item
         }
@@ -157,7 +157,7 @@ extension NSObject {
     
     public var nextStepItem: UIBarButtonItem {
         guard let item = objc_getAssociatedObject(self, &AssociatedKeys.nextStepItem) as? UIBarButtonItem else {
-            let item = UIBarButtonItem(image: UIImage(named: "kkx_arrow_down"), style: .plain, target: self, action: #selector(kkx_nextStepAction))
+            let item = UIBarButtonItem(image: UIImage(named: "kkx_arrow_down"), style: .plain, target: self, action: #selector(kkxNextStepAction))
             objc_setAssociatedObject(self, &AssociatedKeys.nextStepItem, item, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             return item
         }
@@ -166,7 +166,7 @@ extension NSObject {
     
     public var doneItem: UIBarButtonItem {
         guard let item = objc_getAssociatedObject(self, &AssociatedKeys.doneItem) as? UIBarButtonItem else {
-            let item = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(kkx_doneAction))
+            let item = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(kkxDoneAction))
             objc_setAssociatedObject(self, &AssociatedKeys.doneItem, item, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             return item
         }
@@ -175,51 +175,51 @@ extension NSObject {
     
     // MARK: -------- Actions --------
     
-    @objc private func kkx_cancelAction() {
+    @objc private func kkxCancelAction() {
         if let view = self as? UIView {
             view.endEditing(true)
         } else if let viewController = self as? UIViewController {
             viewController.view.endEditing(true)
         }
-        kkx_inputDelegate?.inputCancelButtonAction()
+        kkxInputDelegate?.inputCancelButtonAction()
     }
     
-    @objc private func kkx_previousStepAction() {
+    @objc private func kkxPreviousStepAction() {
         if let responder = kkxFirstResponder,
             responder.isFirstResponder,
-            let inputResponders = kkx_inputDelegate?.inputResponders,
+            let inputResponders = kkxInputDelegate?.inputResponders,
             let index = inputResponders.firstIndex(of: responder),
             index > 0 {
             
             inputResponders[index - 1].becomeFirstResponder()
         }
-        kkx_inputDelegate?.inputPreviousStepButtonAction()
+        kkxInputDelegate?.inputPreviousStepButtonAction()
     }
     
-    @objc private func kkx_nextStepAction() {
+    @objc private func kkxNextStepAction() {
         if let responder = kkxFirstResponder,
             responder.isFirstResponder,
-            let inputResponders = kkx_inputDelegate?.inputResponders,
+            let inputResponders = kkxInputDelegate?.inputResponders,
             let index = inputResponders.firstIndex(of: responder),
             index < inputResponders.count - 1 {
             
             inputResponders[index + 1].becomeFirstResponder()
         }
-        kkx_inputDelegate?.inputNextStepButtonAction()
+        kkxInputDelegate?.inputNextStepButtonAction()
     }
     
-    @objc private func kkx_doneAction() {
+    @objc private func kkxDoneAction() {
         if let view = self as? UIView {
             view.endEditing(true)
         } else if let viewController = self as? UIViewController {
             viewController.view.endEditing(true)
         }
         kkxFirstResponder = nil
-        kkx_inputDelegate?.inputDoneButtonAction()
+        kkxInputDelegate?.inputDoneButtonAction()
     }
     
-    @objc private func kkx_valueChanged(_ datePicker: UIDatePicker) {
-        kkx_inputDelegate?.inputDatePickerValueChanged(datePicker)
+    @objc private func kkxValueChanged(_ datePicker: UIDatePicker) {
+        kkxInputDelegate?.inputDatePickerValueChanged(datePicker)
     }
     
 }
@@ -227,7 +227,7 @@ extension NSObject {
 // MARK: - ======== deinitLog ========
 extension NSObject {
 
-    public func kkx_deinitLog() {
+    public func kkxDeinitLog() {
         kkxPrint(NSStringFromClass(self.classForCoder) + " deinit")
     }
     
@@ -238,7 +238,7 @@ extension NSObject {
     ///     UIEdgeInsets(top: 44, left: 0, bottom: 34, right: 0)
     ///     其他：
     ///     UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
-    public var kkx_safeAreaInsets: UIEdgeInsets {
+    public var kkxSafeAreaInsets: UIEdgeInsets {
         var insets: UIEdgeInsets = .zero
         if #available(iOS 11.0, *) {
             insets = UIApplication.shared.keyWindow?.safeAreaInsets ?? .zero

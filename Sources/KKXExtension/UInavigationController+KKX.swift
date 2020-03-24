@@ -12,15 +12,77 @@ extension UINavigationController {
     // MARK: -------- swizzle --------
     
     public static func initializeNavController() {
-        kkx_swizzleSelector(self, originalSelector: #selector(pushViewController(_:animated:)), swizzledSelector: #selector(kkx_pushViewController(_:animated:)))
+        kkxSwizzleSelector(self, originalSelector: #selector(pushViewController(_:animated:)), swizzledSelector: #selector(kkxPushViewController(_:animated:)))
     }
     
-    @objc private func kkx_pushViewController(_ viewController: UIViewController, animated: Bool) {
+    @objc private func kkxPushViewController(_ viewController: UIViewController, animated: Bool) {
         
         if self.viewControllers.count == 1 { viewController.hidesBottomBarWhenPushed = true }
         if viewController is KKXCustomNavigationBar {
-            viewController.kkx_lastNavBarStyle = self.topViewController?.kkx_customNavBarStyle
+            viewController.kkxLastNavBarStyle = self.topViewController?.kkxCustomNavBarStyle
         }
-        self.kkx_pushViewController(viewController, animated: animated)
+        self.kkxPushViewController(viewController, animated: animated)
     }
+}
+
+extension UINavigationController {
+    
+    open override var childForStatusBarStyle: UIViewController? {
+        return topViewController
+    }
+
+    open override var childForStatusBarHidden: UIViewController? {
+        return topViewController
+    }
+    
+    open override var childForHomeIndicatorAutoHidden: UIViewController? {
+        return topViewController
+    }
+    
+    open override var childForScreenEdgesDeferringSystemGestures: UIViewController? {
+        return topViewController
+    }
+    
+    open override var shouldAutorotate: Bool {
+        if let vc = topViewController {
+            return vc.shouldAutorotate
+        }
+        return false
+    }
+    
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        if let vc = topViewController {
+            return vc.supportedInterfaceOrientations
+        }
+        return .portrait
+    }
+    
+    open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        if let vc = topViewController {
+            return vc.preferredInterfaceOrientationForPresentation
+        }
+        return .portrait
+    }
+    
+    open override var prefersStatusBarHidden: Bool {
+        if let vc = topViewController {
+            return vc.prefersStatusBarHidden
+        }
+        return false
+    }
+    
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
+        if let vc = topViewController {
+            return vc.preferredStatusBarStyle
+        }
+        return .default
+    }
+    
+    open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        if let vc = topViewController {
+            return vc.preferredStatusBarUpdateAnimation
+        }
+        return .none
+    }
+    
 }

@@ -17,13 +17,13 @@ extension UIViewController {
     
     public class func initializeController() {
         
-        kkx_swizzleSelector(self, originalSelector: #selector(willMove(toParent:)), swizzledSelector: #selector(kkx_willMove(toParent:)))
-        kkx_swizzleSelector(self, originalSelector: #selector(viewDidLoad), swizzledSelector: #selector(kkx_viewDidLoad))
-        kkx_swizzleSelector(self, originalSelector: #selector(viewWillAppear(_:)), swizzledSelector: #selector(kkx_viewWillAppear(_:)))
-        kkx_swizzleSelector(self, originalSelector: #selector(viewWillDisappear(_:)), swizzledSelector: #selector(kkx_viewWillDisappear(_:)))
+        kkxSwizzleSelector(self, originalSelector: #selector(willMove(toParent:)), swizzledSelector: #selector(kkxWillMove(toParent:)))
+        kkxSwizzleSelector(self, originalSelector: #selector(viewDidLoad), swizzledSelector: #selector(kkxViewDidLoad))
+        kkxSwizzleSelector(self, originalSelector: #selector(viewWillAppear(_:)), swizzledSelector: #selector(kkxViewWillAppear(_:)))
+        kkxSwizzleSelector(self, originalSelector: #selector(viewWillDisappear(_:)), swizzledSelector: #selector(kkxViewWillDisappear(_:)))
         
-        kkx_swizzleSelector(self, originalSelector: #selector(getter: preferredStatusBarStyle), swizzledSelector: #selector(kkx_statusBarUpdateStyle))
-        kkx_swizzleSelector(self, originalSelector: #selector(getter: preferredStatusBarUpdateAnimation), swizzledSelector: #selector(kkx_statusBarUpdateAnimation))
+        kkxSwizzleSelector(self, originalSelector: #selector(getter: preferredStatusBarStyle), swizzledSelector: #selector(kkxStatusBarUpdateStyle))
+        kkxSwizzleSelector(self, originalSelector: #selector(getter: preferredStatusBarUpdateAnimation), swizzledSelector: #selector(kkxStatusBarUpdateAnimation))
         
     }
     
@@ -81,37 +81,37 @@ extension UIViewController {
     }
     
     /// statusBar高度
-    public var kkx_statusBarHeight: CGFloat {
+    public var kkxStatusBarHeight: CGFloat {
         return UIApplication.shared.statusBarFrame.size.height
     }
     
     /// navbar高度
-    public var kkx_navBarHeight: CGFloat {
+    public var kkxNavBarHeight: CGFloat {
         return navigationController?.navigationBar.frame.size.height ?? 0
     }
     
     /// tabbar高度
-    public var kkx_tabBarHeight: CGFloat {
+    public var kkxTabBarHeight: CGFloat {
         return tabBarController?.tabBar.frame.size.height ?? 0
     }
     
     /// statusBar + navbar高度
-    public var kkx_top: CGFloat {
+    public var kkxTop: CGFloat {
         var top: CGFloat = 0
         if !UIApplication.shared.isStatusBarHidden {
-            top += kkx_statusBarHeight
+            top += kkxStatusBarHeight
         }
         if navigationController?.navigationBar.isHidden == false {
-            top += kkx_navBarHeight
+            top += kkxNavBarHeight
         }
         return top
     }
 
     /// tabbar高度
-    public var kkx_bottom: CGFloat {
+    public var kkxBottom: CGFloat {
         var bottom: CGFloat = 0
         if tabBarController?.tabBar.isHidden == false {
-            bottom += kkx_tabBarHeight
+            bottom += kkxTabBarHeight
         }
         return bottom
     }
@@ -121,14 +121,14 @@ extension UIViewController {
 // MARK: - ======== Life Circle ========
 extension UIViewController {
 
-    @objc private func kkx_willMove(toParent parent: UIViewController?) {
-        if let _ = kkx_lastNavBarStyle, parent == nil {
-            kkx_lastNavBarStyle?()
+    @objc private func kkxWillMove(toParent parent: UIViewController?) {
+        if let _ = kkxLastNavBarStyle, parent == nil {
+            kkxLastNavBarStyle?()
         }
     }
     
-    @objc private func kkx_viewDidLoad() {
-        self.kkx_viewDidLoad()
+    @objc private func kkxViewDidLoad() {
+        self.kkxViewDidLoad()
         if self is KKXCustomBackItem {
             let backItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
             backItem.width = 80
@@ -136,15 +136,15 @@ extension UIViewController {
         }
     }
     
-    @objc private func kkx_viewWillAppear(_ animated: Bool) {
-        self.kkx_viewWillAppear(animated)
+    @objc private func kkxViewWillAppear(_ animated: Bool) {
+        self.kkxViewWillAppear(animated)
         if let _ = navigationController, self is KKXCustomNavigationBar {
             reloadNavigationBar()
         }
     }
     
-    @objc private func kkx_viewWillDisappear(_ animated: Bool) {
-        self.kkx_viewWillDisappear(animated)
+    @objc private func kkxViewWillDisappear(_ animated: Bool) {
+        self.kkxViewWillDisappear(animated)
         view.endEditing(true)
     }
     
@@ -153,7 +153,7 @@ extension UIViewController {
 // MARK: - ======== 状态栏 Style ========
 extension UIViewController {
     
-    public var kkx_statusBarAnimation:  UIStatusBarAnimation {
+    public var kkxStatusBarAnimation:  UIStatusBarAnimation {
         get {
             let style = objc_getAssociatedObject(self, &AssociatedKeys.statusBarAnimation) as? UIStatusBarAnimation
             return style ?? UIStatusBarAnimation.none
@@ -163,7 +163,7 @@ extension UIViewController {
         }
     }
     
-    public var kkx_statusBarStyle: UIStatusBarStyle {
+    public var kkxStatusBarStyle: UIStatusBarStyle {
         get {
             let style = objc_getAssociatedObject(self, &AssociatedKeys.statusBarStyle) as? UIStatusBarStyle
             return style ?? UIStatusBarStyle.default
@@ -174,12 +174,12 @@ extension UIViewController {
         }
     }
     
-    @objc private func kkx_statusBarUpdateStyle() -> UIStatusBarStyle {
-        return kkx_statusBarStyle
+    @objc private func kkxStatusBarUpdateStyle() -> UIStatusBarStyle {
+        return kkxStatusBarStyle
     }
     
-    @objc private func kkx_statusBarUpdateAnimation() -> UIStatusBarAnimation {
-        return kkx_statusBarAnimation
+    @objc private func kkxStatusBarUpdateAnimation() -> UIStatusBarAnimation {
+        return kkxStatusBarAnimation
     }
     
 }
@@ -188,18 +188,18 @@ extension UIViewController {
 extension UIViewController {
     
     private func reloadNavigationBar() {
-        if kkx_customNavBarStyle == nil {
-            kkx_customNavBarStyle = { [unowned self] in
-                self.configureWhiteStyle()
+        if kkxCustomNavBarStyle == nil {
+            kkxCustomNavBarStyle = { [unowned self] in
+                self.configureThemeStyle()
                 self.applyNavBarStyle()
             }
         }
         
-        kkx_customNavBarStyle?()
+        kkxCustomNavBarStyle?()
     }
     
     /// 自定义导航栏风格
-    public var kkx_customNavBarStyle: (() -> Void)? {
+    public var kkxCustomNavBarStyle: (() -> Void)? {
         get {
             let custom = objc_getAssociatedObject(self, &AssociatedKeys.customNavBarStyle) as? (() -> Void)
             return custom
@@ -211,7 +211,7 @@ extension UIViewController {
     }
     
     /// 上一个viewController导航栏风格
-    public var kkx_lastNavBarStyle: (() -> Void)? {
+    public var kkxLastNavBarStyle: (() -> Void)? {
         get {
             let style = objc_getAssociatedObject(self, &AssociatedKeys.lastNavBarStyle) as? (() -> Void)
             return style
@@ -222,7 +222,7 @@ extension UIViewController {
     }
     
     /// 导航栏背景图片，默认nil
-    public var kkx_navBarBgImage: UIImage? {
+    public var kkxNavBarBgImage: UIImage? {
         get {
             let image = objc_getAssociatedObject(self, &AssociatedKeys.backgroundImage) as? UIImage
             return image
@@ -233,7 +233,7 @@ extension UIViewController {
     }
     
     /// 导航栏风格，默认default
-    public var kkx_navBarStyle: UIBarStyle {
+    public var kkxNavBarStyle: UIBarStyle {
         get {
             let style = objc_getAssociatedObject(self, &AssociatedKeys.barStyle) as? UIBarStyle
             return style ?? .default
@@ -244,7 +244,7 @@ extension UIViewController {
     }
     
     /// items颜色，默认black
-    public var kkx_navBarTintColor: UIColor {
+    public var kkxNavTintColor: UIColor {
         get {
             let color = objc_getAssociatedObject(self, &AssociatedKeys.tintColor) as? UIColor
             return color ?? .black
@@ -254,8 +254,19 @@ extension UIViewController {
         }
     }
     
+    /// bar背景颜色，默认nil
+    public var kkxNavBarTintColor: UIColor? {
+        get {
+            let color = objc_getAssociatedObject(self, &AssociatedKeys.barTintColor) as? UIColor
+            return color
+        }
+        set {
+            objc_setAssociatedObject(self, &AssociatedKeys.barTintColor, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
     /// 是否半透明，默认true
-    public var kkx_navBarIsTranslucent: Bool {
+    public var kkxNavIsTranslucent: Bool {
         get {
             let isTranslucent = objc_getAssociatedObject(self, &AssociatedKeys.isTranslucent) as? Bool
             return isTranslucent ?? true
@@ -266,7 +277,7 @@ extension UIViewController {
     }
     
     /// 标题颜色，默认black
-    public var kkx_navBarTitleColor: UIColor {
+    public var kkxNavBarTitleColor: UIColor {
         get {
             let color = objc_getAssociatedObject(self, &AssociatedKeys.titleColor) as? UIColor
             return color ?? .black
@@ -278,40 +289,51 @@ extension UIViewController {
     
     // 应用设置的导航栏效果
     public func applyNavBarStyle() {
-        navigationController?.navigationBar.setBackgroundImage(kkx_navBarBgImage, for: .default)
-        navigationController?.navigationBar.barStyle = kkx_navBarStyle
-        navigationController?.navigationBar.tintColor = kkx_navBarTintColor
-        navigationController?.navigationBar.isTranslucent = kkx_navBarIsTranslucent
+        navigationController?.navigationBar.setBackgroundImage(kkxNavBarBgImage, for: .default)
+        navigationController?.navigationBar.barStyle = kkxNavBarStyle
+        navigationController?.navigationBar.tintColor = kkxNavTintColor
+        navigationController?.navigationBar.barTintColor = kkxNavBarTintColor
+        navigationController?.navigationBar.isTranslucent = kkxNavIsTranslucent
         
-        setTitleColor(kkx_navBarTitleColor)
+        setTitleColor(kkxNavBarTitleColor)
     }
     
     /// 设置导航栏背景色，item、title、状态栏为白色
     public func configureImageStyle(_ image: UIImage? = nil) {
-        kkx_navBarBgImage = image
-        kkx_navBarTintColor = .white
-        kkx_navBarIsTranslucent = false
-        kkx_navBarTitleColor = .white
-        kkx_statusBarStyle = .lightContent
+        kkxNavBarBgImage = image
+        kkxNavTintColor = .white
+        kkxNavIsTranslucent = false
+        kkxNavBarTitleColor = .white
+        kkxStatusBarStyle = .lightContent
     }
     
     /// 设置导航栏为默认半透明，item、title、状态栏为黑色
     public func configureWhiteStyle(_ alpha: CGFloat = 1.0) {
-        kkx_navBarBgImage = nil
-        kkx_navBarStyle = .default
-        kkx_statusBarStyle = .default
-        kkx_navBarIsTranslucent = true
-        kkx_navBarTitleColor = .kkxBlack
-        kkx_navBarTintColor = .kkxBlack
+        kkxNavBarBgImage = nil
+        kkxNavBarStyle = .default
+        kkxStatusBarStyle = .default
+        kkxNavIsTranslucent = true
+        kkxNavBarTitleColor = .kkxBlack
+        kkxNavTintColor = .kkxBlack
     }
     
     /// 设置导航栏为透明色，item、title、状态栏为白色
     public func configureClearStyle() {
-        kkx_navBarBgImage = UIColor.clear.image
-        kkx_navBarTintColor = .white
-        kkx_navBarIsTranslucent = true
-        kkx_navBarTitleColor = .white
-        kkx_statusBarStyle = .lightContent
+        kkxNavBarBgImage = UIColor.clear.image
+        kkxNavTintColor = .white
+        kkxNavIsTranslucent = true
+        kkxNavBarTitleColor = .white
+        kkxStatusBarStyle = .lightContent
+    }
+    
+    public func configureThemeStyle() {
+        kkxNavBarBgImage = nil
+        kkxNavBarStyle = .default
+        kkxStatusBarStyle = .lightContent
+        kkxNavIsTranslucent = false
+        kkxNavBarTitleColor = .white
+        kkxNavTintColor = .white
+        kkxNavBarTintColor = UIColor.mainNavBar
     }
     
     /// 设置标题颜色
@@ -493,10 +515,8 @@ extension UIViewController {
 // MARK: - ======== 保存图片到相册 ========
 extension UIViewController {
     
-    public func kkx_savePhoto(_ image: UIImage?, began: (() -> Void)? = nil, completion: ((Bool, Error?) -> Void)? = nil) {
-        guard let _ = image else {
-            return
-        }
+    public func kkxSavePhoto(_ image: UIImage?, began: (() -> Void)? = nil, completion: ((Bool, Error?) -> Void)? = nil) {
+        guard let _ = image else { return }
         
         PHPhotoLibrary.requestAuthorization { (status) in
             switch status {
@@ -527,6 +547,7 @@ fileprivate struct AssociatedKeys {
     static var backgroundImage = "kkx-backgroundImage"
     static var barStyle = "kkx-barStyle"
     static var tintColor = "kkx-tintColor"
+    static var barTintColor = "kkx-barTintColor"
     static var isTranslucent = "kkx-isTranslucent"
     static var titleColor = "kkx-titleColor"
     static var customNavBarStyle = "kkx-customNavBarStyle"

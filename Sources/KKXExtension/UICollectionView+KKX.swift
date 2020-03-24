@@ -121,7 +121,7 @@ extension UICollectionView {
             configuration(cell)
             cell.setNeedsLayout()
             cell.layoutIfNeeded()
-            let height = cell.kkx_totalHeight
+            let height = cell.kkxTotalHeight
             cellHeightCaches[indexPath] = height
             
             kkxPrint("Calculate height: \(height) for indexPath: \(indexPath.section)-\(indexPath.item)")
@@ -176,7 +176,7 @@ extension UICollectionView {
             configuration(view)
             view.setNeedsLayout()
             view.layoutIfNeeded()
-            let h = view.kkx_totalHeight
+            let h = view.kkxTotalHeight
             headerHeightCaches[section] = h
             if kind == UICollectionView.elementKindSectionFooter {
                 footerHeightCaches[section] = h
@@ -198,33 +198,33 @@ extension UICollectionView {
 extension UICollectionView {
     
     public class func initializeCollectionView() {
-        kkx_swizzleSelector(self, originalSelector: #selector(reloadData), swizzledSelector: #selector(kkx_reloadData))
-        kkx_swizzleSelector(self, originalSelector: #selector(reloadItems(at:)), swizzledSelector: #selector(kkx_reloadItems(at:)))
-        kkx_swizzleSelector(self, originalSelector: #selector(reloadSections(_:)), swizzledSelector: #selector(kkx_reloadSections(_:)))
-        kkx_swizzleSelector(self, originalSelector: #selector(deleteItems(at:)), swizzledSelector: #selector(kkx_deleteItems(at:)))
-        kkx_swizzleSelector(self, originalSelector: #selector(deleteSections(_:)), swizzledSelector: #selector(kkx_deleteSections(_:)))
-        kkx_swizzleSelector(self, originalSelector: #selector(insertItems(at:)), swizzledSelector: #selector(kkx_insertItems(at:)))
-        kkx_swizzleSelector(self, originalSelector: #selector(insertSections(_:)), swizzledSelector: #selector(kkx_insertSections(_:)))
+        kkxSwizzleSelector(self, originalSelector: #selector(reloadData), swizzledSelector: #selector(kkxReloadData))
+        kkxSwizzleSelector(self, originalSelector: #selector(reloadItems(at:)), swizzledSelector: #selector(kkxReloadItems(at:)))
+        kkxSwizzleSelector(self, originalSelector: #selector(reloadSections(_:)), swizzledSelector: #selector(kkxReloadSections(_:)))
+        kkxSwizzleSelector(self, originalSelector: #selector(deleteItems(at:)), swizzledSelector: #selector(kkxDeleteItems(at:)))
+        kkxSwizzleSelector(self, originalSelector: #selector(deleteSections(_:)), swizzledSelector: #selector(kkxDeleteSections(_:)))
+        kkxSwizzleSelector(self, originalSelector: #selector(insertItems(at:)), swizzledSelector: #selector(kkxInsertItems(at:)))
+        kkxSwizzleSelector(self, originalSelector: #selector(insertSections(_:)), swizzledSelector: #selector(kkxInsertSections(_:)))
     }
     
-    @objc private func kkx_reloadData() {
+    @objc private func kkxReloadData() {
         cellHeightCaches.removeAll()
         headerHeightCaches.removeAll()
         footerHeightCaches.removeAll()
         
-        kkx_reloadData()
+        kkxReloadData()
     }
     
-    @objc private func kkx_reloadItems(at indexPaths: [IndexPath]) {
+    @objc private func kkxReloadItems(at indexPaths: [IndexPath]) {
         for indexPath in indexPaths {
             cellHeightCaches.removeValue(forKey: indexPath)
         }
 
-        kkx_reloadItems(at: indexPaths)
+        kkxReloadItems(at: indexPaths)
         kkxPrint("reloadItems at \(indexPaths)")
     }
     
-    @objc private func kkx_reloadSections(_ sections: IndexSet) {
+    @objc private func kkxReloadSections(_ sections: IndexSet) {
         let indexPaths = cellHeightCaches.filter { (caches) -> Bool in
             return sections.contains(caches.key.section)
         }
@@ -246,43 +246,43 @@ extension UICollectionView {
             footerHeightCaches.removeValue(forKey: section)
         }
         
-        kkx_reloadSections(sections)
+        kkxReloadSections(sections)
         kkxPrint("reloadSections at \(indexPaths.keys)")
     }
     
-    @objc private func kkx_deleteItems(at indexPaths: [IndexPath]) {
+    @objc private func kkxDeleteItems(at indexPaths: [IndexPath]) {
         cellHeightCaches.removeAll()
         headerHeightCaches.removeAll()
         footerHeightCaches.removeAll()
         
-        kkx_deleteItems(at: indexPaths)
+        kkxDeleteItems(at: indexPaths)
         kkxPrint("deleteItems at \(indexPaths)")
     }
     
-    @objc private func kkx_deleteSections(_ sections: IndexSet) {
+    @objc private func kkxDeleteSections(_ sections: IndexSet) {
         cellHeightCaches.removeAll()
         headerHeightCaches.removeAll()
         footerHeightCaches.removeAll()
         
-        kkx_deleteSections(sections)
+        kkxDeleteSections(sections)
         kkxPrint("deleteSections at \(sections)")
     }
     
-    @objc private func kkx_insertItems(at indexPaths: [IndexPath]) {
+    @objc private func kkxInsertItems(at indexPaths: [IndexPath]) {
         cellHeightCaches.removeAll()
         headerHeightCaches.removeAll()
         footerHeightCaches.removeAll()
         
-        kkx_insertItems(at: indexPaths)
+        kkxInsertItems(at: indexPaths)
         kkxPrint("insertItems at \(indexPaths)")
     }
     
-    @objc private func kkx_insertSections(_ sections: IndexSet) {
+    @objc private func kkxInsertSections(_ sections: IndexSet) {
         cellHeightCaches.removeAll()
         headerHeightCaches.removeAll()
         footerHeightCaches.removeAll()
         
-        kkx_insertSections(sections)
+        kkxInsertSections(sections)
         kkxPrint("insertSections at \(sections)")
     }
 }

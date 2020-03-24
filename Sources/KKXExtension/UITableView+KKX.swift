@@ -106,7 +106,7 @@ extension UITableView {
             cell.setNeedsLayout()
             cell.layoutIfNeeded()
             
-            let height = cell.kkx_totalHeight
+            let height = cell.kkxTotalHeight
             cellHeightCaches[indexPath] = height
             
             kkxPrint("Calculate height: \(height) for indexPath: \(indexPath.section)-\(indexPath.item)")
@@ -153,7 +153,7 @@ extension UITableView {
             configuration(view)
             view.setNeedsLayout()
             view.layoutIfNeeded()
-            let h = view.kkx_totalHeight
+            let h = view.kkxTotalHeight
             headerHeightCaches[section] = h
             
             kkxPrint("Calculate height: \(h) for section: \(section)")
@@ -185,13 +185,13 @@ extension UITableView {
 extension UITableView {
     
     public class func initializeTableView() {
-        kkx_swizzleSelector(self, originalSelector: #selector(reloadData), swizzledSelector: #selector(kkx_reloadData))
-        kkx_swizzleSelector(self, originalSelector: #selector(reloadRows(at:with:)), swizzledSelector: #selector(kkx_reloadRows(at:with:)))
-        kkx_swizzleSelector(self, originalSelector: #selector(reloadSections(_:with:)), swizzledSelector: #selector(kkx_reloadSections(_:with:)))
-        kkx_swizzleSelector(self, originalSelector: #selector(deleteRows(at:with:)), swizzledSelector: #selector(kkx_deleteRows(at:with:)))
-        kkx_swizzleSelector(self, originalSelector: #selector(deleteSections(_:with:)), swizzledSelector: #selector(kkx_deleteSections(_:with:)))
-        kkx_swizzleSelector(self, originalSelector: #selector(insertRows(at:with:)), swizzledSelector: #selector(kkx_insertRows(at:with:)))
-        kkx_swizzleSelector(self, originalSelector: #selector(insertSections(_:with:)), swizzledSelector: #selector(kkx_insertSections(_:with:)))
+        kkxSwizzleSelector(self, originalSelector: #selector(reloadData), swizzledSelector: #selector(kkx_reloadData))
+        kkxSwizzleSelector(self, originalSelector: #selector(reloadRows(at:with:)), swizzledSelector: #selector(kkx_reloadRows(at:with:)))
+        kkxSwizzleSelector(self, originalSelector: #selector(reloadSections(_:with:)), swizzledSelector: #selector(kkx_reloadSections(_:with:)))
+        kkxSwizzleSelector(self, originalSelector: #selector(deleteRows(at:with:)), swizzledSelector: #selector(kkx_deleteRows(at:with:)))
+        kkxSwizzleSelector(self, originalSelector: #selector(deleteSections(_:with:)), swizzledSelector: #selector(kkx_deleteSections(_:with:)))
+        kkxSwizzleSelector(self, originalSelector: #selector(insertRows(at:with:)), swizzledSelector: #selector(kkx_insertRows(at:with:)))
+        kkxSwizzleSelector(self, originalSelector: #selector(insertSections(_:with:)), swizzledSelector: #selector(kkx_insertSections(_:with:)))
     }
     
     @objc private func kkx_reloadData() {

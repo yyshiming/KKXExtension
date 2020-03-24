@@ -111,7 +111,7 @@ extension UIView: KKXTimer {
         timerObject.isCountDown = true
         timerDelegate?.timerWillRunning(self)
         
-        timerObject.timer = Timer.kkx_scheduledTimer(timeInterval: 1.0, repeats: true, block: { [unowned self](timer) in
+        timerObject.timer = Timer.kkxScheduledTimer(timeInterval: 1.0, repeats: true, block: { [unowned self](timer) in
             self.timerFired(timer)
         })
         
@@ -135,7 +135,7 @@ extension UIView: KKXTimer {
 extension UIView {
     
     /// 是否显示菊花动画
-    public var kkx_loading: Bool {
+    public var kkxLoading: Bool {
         get {
             return (objc_getAssociatedObject(self, &AssociatedKeys.loading) as? Bool) ?? false
         }
@@ -143,14 +143,14 @@ extension UIView {
             objc_setAssociatedObject(self, &AssociatedKeys.loading, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             if newValue {
 
-                addSubview(kkx_loadingView)
-                bringSubviewToFront(kkx_loadingView)
-                kkx_loadingView.startAnimating()
+                addSubview(kkxLoadingView)
+                bringSubviewToFront(kkxLoadingView)
+                kkxLoadingView.startAnimating()
                 
                 let attributes: [NSLayoutConstraint.Attribute] = [.centerX, .centerY, .width, .height]
                 for attribute in attributes {
                     NSLayoutConstraint(
-                        item: kkx_loadingView,
+                        item: kkxLoadingView,
                         attribute: attribute,
                         relatedBy: .equal,
                         toItem: self,
@@ -160,12 +160,12 @@ extension UIView {
                     ).isActive = true
                 }
             } else {
-                kkx_loadingView.removeFromSuperview()
+                kkxLoadingView.removeFromSuperview()
             }
         }
     }
     
-    public var kkx_loadingView: UIActivityIndicatorView {
+    public var kkxLoadingView: UIActivityIndicatorView {
         guard let loadingView = objc_getAssociatedObject(self, &AssociatedKeys.loadingView) as? UIActivityIndicatorView else {
             
             let indicatorView = UIActivityIndicatorView()
@@ -219,34 +219,48 @@ extension UIView {
 
 }
 
-// MARK: - ======== 添加下划线 ========
-/*
- linePath.removeAllPoints()
- linePath.move(to: startPoint)
- linePath.addLine(to: endPoint)
- drawLines()
- */
+// MARK: - ======== 添加分割线 ========
+
+public enum KKXLineType {
+    case top
+    case bottom
+}
+
 extension UIView {
     
-    /// 是否隐藏line，默认false
-    public var isLineHidden: Bool {
+    public var lineView: UIView {
         get {
-            return lineLayer.isHidden
-        }
-        set {
-            lineLayer.isHidden = newValue
+            guard let lineView = objc_getAssociatedObject(self, &AssociatedKeys.lineView) as? UIView else {
+                let view = UIView()
+                view.backgroundColor = UIColor.kkxSeparator
+                addSubview(view)
+                objc_setAssociatedObject(self, &AssociatedKeys.lineView, view, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+                return view
+            }
+            return lineView
         }
     }
     
-    /// 默认 0.5
-    public var lineWidth: CGFloat {
+    /// 是否隐藏line，默认true
+    public var isLineHidden: Bool {
         get {
-            let width = objc_getAssociatedObject(self, &AssociatedKeys.lineWidth) as? CGFloat
-            return width ?? lineDefaultWidth
+            let isLineHidden = objc_getAssociatedObject(self, &AssociatedKeys.isLineHidden) as? Bool
+            return isLineHidden ?? true
         }
         set {
-            lineLayer.lineWidth = newValue
-            objc_setAssociatedObject(self, &AssociatedKeys.lineWidth, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            lineView.isHidden = newValue
+            objc_setAssociatedObject(self, &AssociatedKeys.isLineHidden, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    /// 是否隐藏line，默认false
+    public var lineType: KKXLineType {
+        get {
+            let type = objc_getAssociatedObject(self, &AssociatedKeys.lineType) as? KKXLineType
+            return type ?? .bottom
+        }
+        set {
+            objc_setAssociatedObject(self, &AssociatedKeys.lineType, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     
@@ -257,7 +271,7 @@ extension UIView {
             return color ?? lineDefaultColor
         }
         set {
-            lineLayer.strokeColor = newValue.cgColor
+            lineView.backgroundColor = newValue
             objc_setAssociatedObject(self, &AssociatedKeys.lineColor, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
@@ -298,27 +312,11 @@ extension UIView {
                 shapeLayer.backgroundColor = UIColor.clear.cgColor
                 shapeLayer.fillColor = UIColor.clear.cgColor
                 shapeLayer.strokeColor = lineColor.cgColor
-                shapeLayer.lineWidth = lineWidth
                 layer.addSublayer(shapeLayer)
                 objc_setAssociatedObject(self, &AssociatedKeys.lineLayer, shapeLayer, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
                 return shapeLayer
             }
         }
-    }
-    
-    /// 在layoutSubviews中调用此方法添加line
-    public func drawBottomLine() {
-        let startPoint = CGPoint(x: lineInsets.left, y: frame.size.height - lineWidth)
-        let endPoint = CGPoint(x: frame.size.width - lineInsets.right, y: frame.size.height - lineWidth)
-        linePath.removeAllPoints()
-        linePath.move(to: startPoint)
-        linePath.addLine(to: endPoint)
-        drawLines()
-    }
-    
-    /// 自定义path
-    public func drawLines(_ path: UIBezierPath? = nil) {
-        lineLayer.path = path?.cgPath ?? linePath.cgPath
     }
     
     /// 添加stroke动画
@@ -331,8 +329,8 @@ extension UIView {
     }
     
 }
-private let lineDefaultWidth: CGFloat = 0.5/UIScreen.main.scale
-private var lineDefaultColor: UIColor {
+public let lineDefaultWidth: CGFloat = 1.0/UIScreen.main.scale
+public var lineDefaultColor: UIColor {
     .kkxSeparator
 }
 
@@ -425,12 +423,12 @@ extension UIView {
 public protocol UIViewIndexPath {
     
     /// 可用于UITableViewCell、UICollectionViewCell传参数
-    var kkx_indexPath: IndexPath? { get set }
+    var kkxIndexPath: IndexPath? { get set }
 }
 
 extension UIView : UIViewIndexPath {
     
-    public var kkx_indexPath: IndexPath? {
+    public var kkxIndexPath: IndexPath? {
         get {
             let indexPath = objc_getAssociatedObject(self, &AssociatedKeys.indexPath) as? IndexPath
             return indexPath
@@ -447,9 +445,9 @@ extension UIView{
     
     /// 高度计算
     ///
-    ///     view中重写 kkx_totalHeight，返回view的真实高度
+    ///     view中重写 kkxTotalHeight，返回view的真实高度
     @objc
-    open var kkx_totalHeight: CGFloat {
+    open var kkxTotalHeight: CGFloat {
         0.0
     }
 
@@ -464,8 +462,11 @@ private struct AssociatedKeys {
     static var loadingView = "kkx-loadingView"
     static var noDataView = "kkx-noDataView"
     
+    static var lineView = "kkx-lineView"
+    static var isLineHidden = "kkx-isLineHidden"
     static var linePath = "kkx-linePath"
     static var lineLayer = "kkx-lineLayer"
+    static var lineType = "kkx-lineType"
     static var lineWidth = "kkx-lineWidth"
     static var lineColor = "kkx-lineColor"
     static var lineInsets = "kkx-lineInsets"

@@ -11,7 +11,7 @@ import ObjectiveC
 /// - Parameter theClass: 要交换的Class
 /// - Parameter originalSelector: Class方法
 /// - Parameter swizzledSelector: 自定义方法
-public func kkx_swizzleSelector(_ theClass: AnyClass, originalSelector: Selector, swizzledSelector: Selector) {
+public func kkxSwizzleSelector(_ theClass: AnyClass, originalSelector: Selector, swizzledSelector: Selector) {
     
     let originalMethod = class_getInstanceMethod(theClass, originalSelector)
     let swizzledMethod = class_getInstanceMethod(theClass, swizzledSelector)

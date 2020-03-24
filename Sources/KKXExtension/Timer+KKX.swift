@@ -10,7 +10,7 @@ import UIKit
 extension Timer {
 
     /// iOS 10.0之前避免循环引用
-    public class func kkx_scheduledTimer(timeInterval: TimeInterval, repeats: Bool, block: @escaping((Timer) -> Void))->Timer{
+    public class func kkxScheduledTimer(timeInterval: TimeInterval, repeats: Bool, block: @escaping((Timer) -> Void))->Timer{
         if #available(iOS 10.0, *) {
             let timer = Timer(timeInterval: timeInterval, repeats: repeats, block: block)
             RunLoop.current.add(timer, forMode: .common)

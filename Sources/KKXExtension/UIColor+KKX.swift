@@ -22,6 +22,26 @@ extension UIColor {
         return image
     }
     
+    /// 单色转换为image
+    public func image(_ size: CGSize, radius: CGFloat = 0) -> UIImage? {
+        let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        UIGraphicsBeginImageContext(rect.size);
+        let context = UIGraphicsGetCurrentContext()
+        context?.setFillColor(self.cgColor)
+        
+        let path = UIBezierPath(roundedRect: rect, cornerRadius: radius)
+        context?.addPath(path.cgPath)
+        context?.drawPath(using: .fill)
+        
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        let w = size.width/2
+        let h = size.height/2
+        let insets = UIEdgeInsets(top: h-1, left: w-1, bottom: h, right: w)
+        let resizeImage = image?.resizableImage(withCapInsets: insets, resizingMode: .stretch)
+        UIGraphicsEndImageContext()
+        return resizeImage
+    }
+    
     public convenience init?(red: UInt32, green: UInt32, blue: UInt32, transparent: CGFloat = 1) {
         let r = min(max(red, 0), 255)
         let g = min(max(green, 0), 255)

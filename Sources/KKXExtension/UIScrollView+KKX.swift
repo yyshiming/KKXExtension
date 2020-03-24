@@ -24,14 +24,14 @@ extension UIScrollView {
     public var pageSize: Int {
         get {
             let page = objc_getAssociatedObject(self, &AssociatedKeys.pageSize) as? Int
-            return page ?? kkx_defaultSize
+            return page ?? kkxDefaultSize
         }
         set {
             objc_setAssociatedObject(self, &AssociatedKeys.pageSize, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     
-    private var kkx_defaultSize: Int {
+    private var kkxDefaultSize: Int {
         return 10
     }
     
